@@ -1,25 +1,22 @@
-# Build frontend
-FROM node:18-alpine AS frontend-builder
+# 1) Build React frontend
+FROM node:18-alpine AS frontend
 WORKDIR /frontend
-COPY frontend/package*.json ./
+COPY client/package*.json ./
 RUN npm install
-COPY frontend/ .
+COPY client/ .
 RUN npm run build
 
-# Build backend
-FROM node:18-alpine AS backend-builder
+# 2) Build Express backend
+FROM node:18-alpine AS backend
 WORKDIR /backend
-COPY backend/package*.json ./
+COPY server/package*.json ./
 RUN npm install
-COPY backend/ .
+COPY server/ .
 
-# Final image
+# 3) Final image
 FROM node:18-alpine
 WORKDIR /app
-
-# Copy backend and frontend build
-COPY --from=backend-builder /backend /app
-COPY --from=frontend-builder /frontend/build /app/public
-
+COPY --from=backend /backend /app
+COPY --from=frontend /frontend/build /app/public
 EXPOSE 3000
-CMD ["node", "server.js"]
+CMD ["npm", "start"]
