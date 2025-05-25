@@ -6,20 +6,20 @@ pipeline {
     SELENIUM_IMAGE= "selenium-tests:latest"
   }
 
-  stages {
-    stage('Lint') {
-      parallel {
-        frontend: {
-          dir('client') {
-            sh 'npm install'
-            sh 'npx eslint src/**/*.js || true'
-          }
+    stages {
+        stage('Checkout Code') {
+            steps {
+                git url: 'https://github.com/KazmIII/devopsAssignment3.git', branch: 'main'
+            }
         }
-        backend: {
-          dir('server') {
-            sh 'npm install'
-            sh 'npx eslint . || true'
-          }
+
+        stage('Code Linting') {
+            steps {
+                dir('client') {
+                    sh 'npm install'
+                    sh 'npx eslint src/**/*.js || true'
+                }
+            }
         }
       }
     }
