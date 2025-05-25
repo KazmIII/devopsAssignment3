@@ -2,9 +2,7 @@
 FROM node:18-alpine AS frontend
 WORKDIR /frontend
 COPY client/package*.json ./
-COPY client/package*.json ./
 RUN npm install
-COPY client/ .
 COPY client/ .
 RUN npm run build
 
@@ -12,9 +10,7 @@ RUN npm run build
 FROM node:18-alpine AS backend
 WORKDIR /backend
 COPY server/package*.json ./
-COPY server/package*.json ./
 RUN npm install
-COPY server/ .
 COPY server/ .
 
 # 3) Final image
@@ -23,5 +19,4 @@ WORKDIR /app
 COPY --from=backend /backend /app
 COPY --from=frontend /frontend/build /app/public
 EXPOSE 3000
-CMD ["npm", "start"]
 CMD ["npm", "start"]
