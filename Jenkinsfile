@@ -16,7 +16,7 @@ pipeline {
 
         stage('Code Linting') {
             steps {
-                dir('frontend') {
+                dir('client') {
                     sh 'npm install'
                     sh 'npx eslint src/**/*.js || true'
                 }
@@ -33,7 +33,7 @@ pipeline {
 
         stage('Unit Testing') {
             steps {
-                dir('backend') {
+                dir('server') {
                     sh 'npm install'
                     sh 'npm test'
                 }
