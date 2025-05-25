@@ -2,15 +2,24 @@ pipeline {
     agent any
 
     environment {
-        DOCKERHUB_CREDENTIALS = credentials('dockerhub-creds')
-        DOCKER_IMAGE = 'saniakazmii/mern-message-board'
-        DOCKER_TAG = 'latest'
+        DOCKER_IMAGE = "saniakazmii/mern-message-board"
+        DOCKER_TAG = "latest"
+        SELENIUM_IMAGE = "selenium-tests"
     }
 
     stages {
-        stage('Checkout') {
+        stage('Checkout Code') {
             steps {
-                git branch: 'main', url: 'https://github.com/KazmIII/devopsAssignment3.git'
+                git url: 'https://github.com/KazmIII/devopsAssignment3.git', branch: 'main'
+            }
+        }
+
+        stage('Code Linting') {
+            steps {
+                dir('frontend') {
+                    sh 'npm install'
+                    sh 'npx eslint src/**/*.js || true'
+                }
             }
         }
 
@@ -22,23 +31,16 @@ pipeline {
             }
         }
 
-        stage('Run Tests') {
+        stage('Unit Testing') {
             steps {
-                sh 'docker run ${DOCKER_IMAGE}:${DOCKER_TAG} npm test'
-            }
-        }
-
-        stage('Push to Docker Hub') {
-            steps {
-                script {
-                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub-creds') {
-                        dockerImage.push()
-                    }
+                dir('backend') {
+                    sh 'npm install'
+                    sh 'npm test'
                 }
             }
         }
 
-        stage('Deploy') {
+        stage('Deploy Container') {
             steps {
                 sh '''
                     docker stop mern-app || true
@@ -47,16 +49,25 @@ pipeline {
                 '''
             }
         }
+
+        stage('Selenium Tests') {
+            steps {
+                dir('selenium') {
+                    script {
+                        def seleniumImage = docker.build("${SELENIUM_IMAGE}")
+                        seleniumImage.run('--rm')
+                    }
+                }
+            }
+        }
     }
 
     post {
         success {
-            slackSend channel: '#deployments',
-                      message: "Deployment Successful: ${env.BUILD_URL}"
+            echo "✅ CI/CD Pipeline executed successfully!"
         }
         failure {
-            slackSend channel: '#deployments',
-                      message: "Deployment Failed: ${env.BUILD_URL}"
+            echo "❌ CI/CD Pipeline failed!"
         }
     }
 }
