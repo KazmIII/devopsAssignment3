@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+  mongo:
+    image: mongo:6
+    ports:
+      - "27017:27017"
+    volumes:
+      - data:/data/db
+
+  mern-app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      MONGO_URI: mongodb://mongo:27017/mydb
+    depends_on:
+      - mongo
+
+  selenium:
+    build: ./selenium
+    # Share the same network so `mern-app` is reachable by service name
+    depends_on:
+      - mern-app
+    environment:
+      # inside container, host.docker.internal should point to the host,
+      # but if that fails on Linux, use the service name:
+      APP_URL: http://mern-app:3000
+    # Run tests and then exit
+    entrypoint: ["npm", "test"]
+
+volumes:
+  data:

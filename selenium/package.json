@@ -1,0 +1,16 @@
+{
+  "name": "selenium",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --timeout 30000"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "mocha": "^11.5.0",
+    "selenium-webdriver": "^4.33.0"
+  }
+}
