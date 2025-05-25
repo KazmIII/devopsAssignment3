@@ -1,0 +1,149 @@
+/* App.css */
+.app-container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 40px;
+  background: linear-gradient(145deg, #ffffff, #f8f9fa);
+  border-radius: 20px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  font-family: 'Poppins', sans-serif;
+}
+
+.title {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 30px;
+  font-size: 2.2em;
+  font-weight: 600;
+  background: linear-gradient(45deg, #007bff, #00b4ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  letter-spacing: -0.5px;
+}
+
+.message-form {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.message-input {
+  flex: 1;
+  padding: 14px 20px;
+  border: 2px solid #e0e7ff;
+  border-radius: 12px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  background: #ffffff;
+}
+
+.message-input:focus {
+  border-color: #007bff;
+  box-shadow: 0 4px 15px rgba(0, 123, 255, 0.15);
+  outline: none;
+}
+
+.submit-button {
+  padding: 14px 28px;
+  background: linear-gradient(135deg, #007bff, #0062cc);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.submit-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 20px rgba(0, 123, 255, 0.3);
+}
+
+.submit-button:active {
+  transform: translateY(0);
+}
+
+.message-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 500px;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+/* Scrollbar Styling */
+.message-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.message-list::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+}
+
+.message-list::-webkit-scrollbar-thumb {
+  background: #007bff;
+  border-radius: 10px;
+}
+
+@keyframes messageEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.message-item {
+  background: #ffffff;
+  margin-bottom: 15px;
+  padding: 18px 25px;
+  border-radius: 15px;
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.06);
+  animation: messageEntrance 0.4s ease-out;
+  transition: all 0.2s ease;
+  position: relative;
+  border-left: 4px solid #007bff;
+}
+
+.message-item:hover {
+  transform: translateX(5px);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
+
+.message-item::before {
+  content: '💬';
+  position: absolute;
+  left: -40px;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0.3;
+}
+
+@media (max-width: 640px) {
+  .app-container {
+    margin: 20px;
+    padding: 25px;
+  }
+
+  .title {
+    font-size: 1.8em;
+  }
+
+  .message-form {
+    flex-direction: column;
+  }
+
+  .submit-button {
+    justify-content: center;
+  }
+}
